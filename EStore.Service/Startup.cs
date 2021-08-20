@@ -1,3 +1,5 @@
+using EStore.Contracts;
+using EStore.Service.Controllers;
 using EStore.Service.DBContext;
 using EStore.Service.Services;
 using EStore.Service.Services.Implementation;
@@ -7,26 +9,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NServiceBus;
 using Serilog;
+using System;
 
 //TO Start Docker container use the following command in PowerShell
 //docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
-    
+
 namespace EStore.Service
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-           
-            Configuration = configuration;
+           Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddHostedService<>();
+            
             //Json Serializer
             services.AddControllers().AddNewtonsoftJson(options =>
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

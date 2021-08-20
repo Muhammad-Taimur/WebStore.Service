@@ -1,4 +1,5 @@
-﻿using EStore.Service.Entities;
+﻿using EStore.Contracts;
+using EStore.Service.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

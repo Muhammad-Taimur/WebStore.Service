@@ -18,25 +18,24 @@ namespace EStore.Service
 
         public static void Main(string[] args)
         {
-            ////NService Bus Configuration
-            //var endpointConfiguration = new EndpointConfiguration("EStore.Service");
-            //endpointConfiguration.EnableInstallers();
+            //NService Bus Configuration
+            var endpointConfiguration = new EndpointConfiguration("EStore.Service");
+            endpointConfiguration.EnableInstallers();
 
-            //var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-            //transport.UseConventionalRoutingTopology();
-            //transport.ConnectionString("host=localhost");
+            var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+            transport.UseConventionalRoutingTopology();
+            transport.ConnectionString("host=localhost");
 
-            ////var delayedDelivery = transport.DelayedDelivery();
-            ////delayedDelivery.DisableTimeoutManager();
+            //var delayedDelivery = transport.DelayedDelivery();
+            //delayedDelivery.DisableTimeoutManager();
 
-            //var routing = transport.Routing();
-            //routing.RouteToEndpoint(typeof(Product),"Sales");
+            var routing = transport.Routing();
+            routing.RouteToEndpoint(typeof(ProductCommand), "Sales");
 
-            //var endpointInstance = Endpoint.Start(endpointConfiguration)
-            //    .ConfigureAwait(false);
+            var endpointInstance = Endpoint.Start(endpointConfiguration)
+                .ConfigureAwait(false);
 
-            //Console.WriteLine("Bus Started...");
-
+            Console.WriteLine("Bus Started...");
 
             Configuration = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
@@ -83,28 +82,29 @@ namespace EStore.Service
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseNServiceBus(hostBuilderContext => {
+                .UseNServiceBus(hostBuilderContext =>
+                {
                     var endpointConfiguration = new EndpointConfiguration("EStore.Service");
                     //NService Bus Configuration
                     endpointConfiguration.EnableInstallers();
 
                     var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-                   
+
                     transport.UseConventionalRoutingTopology();
                     transport.ConnectionString("host=localhost");
 
-                    //var routing = transport.Routing();
-                    //routing.RouteToEndpoint(typeof(Product), "Sales");
+                    var routing = transport.Routing();
+                    routing.RouteToEndpoint(typeof(ProductCommand), "Sales");
                     //var endpointInstance =  Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
                     Console.WriteLine("Bus Started...");
                     //endpointConfiguration.UseContainer(new DefaultServiceProviderFactory());
-       
-    //                endpointConfiguration.RegisterComponents(
-    //registration: configureComponents =>
-    //{
-    //    configureComponents.ConfigureComponent<IEndpointInstance>(DependencyLifecycle.InstancePerCall);
-    //});
-                    return endpointConfiguration;                    
+
+                    //                endpointConfiguration.RegisterComponents(
+                    //registration: configureComponents =>
+                    //{
+                    //    configureComponents.ConfigureComponent<IEndpointInstance>(DependencyLifecycle.InstancePerCall);
+                    //});
+                    return endpointConfiguration;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

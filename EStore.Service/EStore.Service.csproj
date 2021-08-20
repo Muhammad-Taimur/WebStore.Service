@@ -33,9 +33,5 @@
     <ProjectReference Include="..\EStore.Contracts\EStore.Contracts.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\" />
-  </ItemGroup>
-
 
 </Project>
